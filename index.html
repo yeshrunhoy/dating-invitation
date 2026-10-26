@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>A Little Date Invitation 💌</title>
+<style>
+:root{--pink:#3563d9;--deep:#2346a0;--cream:#f7f8fb;--ink:#202938;--soft:#e8eefc}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#f3f5f9,#e9edf4);display:grid;place-items:center;padding:22px;overflow-x:hidden}
+.heart{display:none;position:fixed;bottom:-30px;opacity:.25;pointer-events:none;animation:float 9s linear infinite;font-size:22px}@keyframes float{to{transform:translateY(-115vh) rotate(25deg);opacity:0}}
+.card{width:min(100%,620px);background:#fff;border:1px solid #e0e5ee;border-radius:20px;padding:clamp(24px,5vw,44px);box-shadow:0 20px 60px #1b2a4412;text-align:center;position:relative;z-index:1}
+.badge{display:inline-block;border-radius:999px;background:var(--soft);color:var(--deep);padding:7px 13px;font-size:.83rem;font-weight:700;letter-spacing:.04em}.emoji{font-size:3.7rem;margin:14px 0 4px;animation:bob 2.4s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-7px)}}h1{font-size:clamp(2rem,7vw,3.1rem);line-height:1.1;margin:12px 0;color:#202938}p{line-height:1.65;color:#596579;margin:10px auto 22px;max-width:460px}.buttons{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}.btn{border:0;border-radius:14px;padding:13px 20px;font:inherit;font-weight:750;cursor:pointer;transition:transform .18s,box-shadow .18s;background:var(--pink);color:white;box-shadow:0 7px 18px #ff5c8a35}.btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px #ff5c8a45}.btn.secondary{background:#fff;color:#344054;border:1px solid #d6dce7;box-shadow:none}.btn:focus-visible,.choice:focus-visible,input:focus-visible{outline:3px solid #8d2851;outline-offset:3px}
+.progress{height:6px;background:#e7ebf2;border-radius:9px;overflow:hidden;margin:24px 0 28px}.bar{height:100%;width:0;background:linear-gradient(90deg,#7b9cf4,#3563d9);transition:width .3s}.step-label{font-size:.8rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#667085}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:11px;margin:20px 0 25px}.choice{padding:17px 10px;border:1.5px solid #dce2ec;border-radius:14px;background:#fff;cursor:pointer;color:var(--ink);font:inherit;font-weight:650;min-height:90px;transition:.18s}.choice .big{display:block;font-size:1.8rem;margin-bottom:5px}.choice.selected{border-color:var(--pink);background:#f0f4ff;box-shadow:0 0 0 3px #3563d920;transform:translateY(-2px)}.field{display:block;text-align:left;margin:15px 0;font-weight:700;color:#79435a}.field input,.field select{display:block;width:100%;margin-top:7px;border:1.5px solid #dce2ec;border-radius:10px;padding:13px 14px;font:inherit;color:var(--ink);background:#fffafd}.error{color:#b0003a;font-size:.9rem;min-height:1.2em}.summary{background:#f5f7fb;border-radius:18px;padding:18px;text-align:left;margin:20px 0}.summary p{margin:9px 0;max-width:none}.hidden{display:none!important}.tiny{font-size:.84rem;color:#a47788;margin-top:24px}.final-heart{font-size:4rem}
+#finish{background:linear-gradient(145deg,#15151d,#29131f);color:#fff;border:1px solid #6d3a50;box-shadow:0 22px 80px #16071055}
+#finish h1{color:#ffd0df;font-family:Georgia,serif;font-style:italic}
+#finish p{color:#f0dce4}
+#finish .summary{background:#ffffff12;border:1px solid #ffffff20;color:#fff}
+#finish .summary p{color:#fff}
+#finish .confetti{color:#ffb8d0}
+#finish .btn{background:#d94f7b;box-shadow:0 8px 24px #d94f7b30}
+#finish .btn.secondary{background:transparent;color:#ffe4ed;border-color:#c78ca4;box-shadow:none}
+#finish .final-heart{filter:drop-shadow(0 0 16px #f36b9b)}.confetti{font-size:1.6rem;letter-spacing:.4rem;margin:8px 0}
+@media(max-width:420px){.buttons .btn{width:100%}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+
+<main class="card">
+<section id="welcome">
+  <span class="badge">DATE INVITATION</span>
+  <div class="emoji">📅</div>
+  <h1>Would you like to go on a date with me?</h1>
+  <p>I would like to spend some time together. Choose an answer below.</p>
+  <div class="buttons"><button class="btn" id="yesBtn">Yes</button><button class="btn secondary" id="noBtn">No</button></div>
+  <p class="tiny">A simple invitation to make a plan together.</p>
+</section>
+<section id="noThanks" class="hidden"><div class="emoji">🌸</div><h1>No worries ❤️</h1><p>Thanks for being honest. Maybe another time, if you feel like it. 😊</p><button class="btn secondary" id="backBtn">Go back</button></section>
+<section id="wizard" class="hidden">
+  <span class="badge">PLAN THE DATE</span><div class="progress"><div class="bar" id="bar"></div></div><div class="step-label" id="stepLabel"></div><h1 id="question"></h1><p id="subtitle"></p><div id="choices" class="grid"></div><div id="fields"></div><div class="error" id="error"></div><div class="buttons" style="margin-top:16px"><button class="btn secondary" id="prevBtn">← Back</button><button class="btn" id="nextBtn">Next 💕 →</button></div>
+</section>
+<section id="finish" class="hidden"><div class="confetti">✨ 💗 ✨</div><div class="final-heart">💌</div><h1>It's a date!</h1><p id="finalMessage">I can't wait to spend time with you. ❤️</p><div class="summary" id="summary"></div><p>Whatever we do, I'm happy I get to spend time with you. 🌷</p><button class="btn" onclick="window.print()">Save / print our plan 🖨️</button><button class="btn secondary" id="restartBtn" style="margin-left:6px">Start again</button></section>
+</main>
+<script>
+const steps=[
+ {key:'place',label:'Step 1 of 5',title:'Where should we go?',sub:'Pick the place that sounds fun to you.',options:[['☕','Cute café'],['🍽️','Restaurant'],['🌳','Park'],['🎬','Cinema'],['🌅','Scenic walk'],['🎁','Surprise me!']]},
+ {key:'food',label:'Step 2 of 5',title:'What should we eat?',sub:'Your cravings, your choice. 😋',options:[['🍕','Pizza'],['🍔','Burger'],['🍗','Chicken'],['🍝','Pasta'],['🍰','Cake & dessert'],['🥗','Something light'],['🧋','Drinks & snacks'],['🎁','Surprise me!']]},
+ {key:'activity',label:'Step 3 of 5',title:'What shall we do together?',sub:'Choose our little adventure.',options:[['🎬','Watch a movie'],['🚶','Take a walk'],['📸','Take cute pictures'],['💬','Talk and chill'],['🎮','Play games'],['🎁','Surprise me!']]},
+ {key:'date',label:'Step 4 of 5',title:'When are you free?',sub:'Choose a date and a time that work for you.',type:'date'},
+ {key:'extras',label:'Step 5 of 5',title:'One last little detail…',sub:'Anything you want me to know?',type:'extras'}
+];
+const answers={place:'',food:'',activity:'',date:'',time:'',note:''};let index=0;
+const $=id=>document.getElementById(id);function show(id){['welcome','noThanks','wizard','finish'].forEach(x=>$(x).classList.toggle('hidden',x!==id))}
+$('yesBtn').onclick=()=>{show('wizard');render()};
+// Playfully dodge the cursor/finger so the No button is hard to catch.
+const noBtn=$('noBtn');
+function moveNoButton(){
+  noBtn.style.position='fixed';
+  noBtn.style.zIndex='9999';
+  const pad=16, maxX=Math.max(pad,window.innerWidth-noBtn.offsetWidth-pad), maxY=Math.max(pad,window.innerHeight-noBtn.offsetHeight-pad);
+  noBtn.style.left=(pad+Math.random()*(maxX-pad))+'px';
+  noBtn.style.top=(pad+Math.random()*(maxY-pad))+'px';
+}
+noBtn.addEventListener('pointerenter',moveNoButton);
+noBtn.addEventListener('touchstart',e=>{e.preventDefault();moveNoButton();},{passive:false});
+noBtn.addEventListener('click',e=>{e.preventDefault();moveNoButton();});
+window.addEventListener('resize',()=>{if(noBtn.style.position==='fixed')moveNoButton()});
+$('backBtn').onclick=()=>show('welcome');$('prevBtn').onclick=()=>{if(index>0){index--;render()}else show('welcome')};$('nextBtn').onclick=nextStep;$('restartBtn').onclick=()=>{Object.keys(answers).forEach(k=>answers[k]='');index=0;show('welcome')};
+function render(){const s=steps[index];$('stepLabel').textContent=s.label;$('question').textContent=s.title;$('subtitle').textContent=s.sub;$('bar').style.width=((index+1)/steps.length*100)+'%';$('choices').innerHTML='';$('fields').innerHTML='';$('error').textContent='';$('nextBtn').textContent=index===steps.length-1?'Show our date plan':'Next →';$('prevBtn').classList.toggle('hidden',index===0);
+if(s.options){s.options.forEach(([emoji,label])=>{const b=document.createElement('button');b.className='choice'+(answers[s.key]===label?' selected':'');b.type='button';b.innerHTML=`<span class="big">${emoji}</span>${label}`;b.onclick=()=>{answers[s.key]=label;render()};$('choices').appendChild(b)})}
+if(s.type==='date'){$('fields').innerHTML=`<label class="field">Date<input id="dateInput" type="date" min="${new Date().toISOString().slice(0,10)}" value="${answers.date}"></label><label class="field">Time<select id="timeInput"><option value="">Choose a time</option>${['10:00 AM','11:00 AM','12:00 PM','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM','6:00 PM','7:00 PM'].map(t=>`<option ${answers.time===t?'selected':''}>${t}</option>`).join('')}</select></label>`}
+if(s.type==='extras'){$('fields').innerHTML=`<label class="field">Any special request? (optional)<input id="noteInput" maxlength="180" placeholder="A color to wear, a song, or anything…" value="${escapeHtml(answers.note)}"></label><p style="font-size:.9rem">You can leave this blank. The important thing is that we're both comfortable. 💗</p>`}
+}
+function nextStep(){const s=steps[index];if(s.options&&!answers[s.key]){$('error').textContent='Choose your favorite option to continue 💗';return}if(s.type==='date'){answers.date=$('dateInput').value;answers.time=$('timeInput').value;if(!answers.date||!answers.time){$('error').textContent='Please choose both a date and a time. 📅';return}}if(s.type==='extras')answers.note=$('noteInput').value.trim();if(index<steps.length-1){index++;render()}else finish()}
+function escapeHtml(x){return x.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function finish(){show('finish');const d=new Date(answers.date+'T12:00:00');const pretty=d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});$('summary').innerHTML=`<p>📍 <strong>Place:</strong> ${escapeHtml(answers.place)}</p><p>🍽️ <strong>Food:</strong> ${escapeHtml(answers.food)}</p><p>✨ <strong>Activity:</strong> ${escapeHtml(answers.activity)}</p><p>📅 <strong>Date:</strong> ${pretty}</p><p>🕒 <strong>Time:</strong> ${escapeHtml(answers.time)}</p>${answers.note?`<p>💌 <strong>Special note:</strong> ${escapeHtml(answers.note)}</p>`:''}`;$('finalMessage').textContent='I can’t wait to spend this special time with you. You make ordinary moments feel magical, and I’m so happy we get to share one together. ❤️'}
+</script>
+</body></html>
